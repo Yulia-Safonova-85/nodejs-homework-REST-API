@@ -1,10 +1,6 @@
-
-
 const contactsService = require("../models/contacts");
 
 const {HttpError} = require("../helpers");
-
-
 
 const listContacts = async (req, res, next) => {
     try{
@@ -30,13 +26,16 @@ const listContacts = async (req, res, next) => {
     }
   }
 
-  const addContact = async (req, res, next) => {
-      const result = await contactsService.addContact(req.body);
-      res.status(201).json(result);
+  const addContact = async (req, res) => {
+    try{
+        const result = await contactsService.addContact(req.body);
+        res.status(201).json(result);
+    }
+      catch(error){
+        next(error);
+      }
     }
     
-  
-
   const removeContact = async (req, res, next) => {
     try{
       const {contactId} = req.params;
@@ -52,13 +51,17 @@ const listContacts = async (req, res, next) => {
   }
 
   const updateContact = async (req, res, next) => {
-   
-      const {contactId} = req.params;
+    try{
+       const {contactId} = req.params;
       const result = await contactsService.updateContact(contactId, req.body);
       if(!result){
         throw HttpError(400, `missing fields`);
         }
-      res.json(result);
+      res.json(result); 
+    }
+      catch(error){
+        next(error)
+      }
     }
    
     
