@@ -14,8 +14,8 @@ const listContacts = async (req, res, next) => {
 
   const getContactById = async (req, res, next) => {
     try{
-      const {contactId} = req.params;
-      const result = await contactsService.getContactById(contactId);
+      const {id} = req.params;
+      const result = await contactsService.getContactById(id);
       if (!result){
         throw HttpError(404, `Not found`);
         }
@@ -38,8 +38,8 @@ const listContacts = async (req, res, next) => {
     
   const removeContact = async (req, res, next) => {
     try{
-      const {contactId} = req.params;
-      const result = await contactsService.removeContact(contactId);
+      const {id} = req.params;
+      const result = await contactsService.removeContact(id);
       if(!result){
         throw HttpError(404, `Not found`);
         }
@@ -52,8 +52,8 @@ const listContacts = async (req, res, next) => {
 
   const updateContact = async (req, res, next) => {
     try{
-       const {contactId} = req.params;
-      const result = await contactsService.updateContact(contactId, req.body);
+      const {id} = req.params;
+      const result = await contactsService.updateContact(id, req.body);
       if(!result){
         throw HttpError(400, `missing fields`);
         }
