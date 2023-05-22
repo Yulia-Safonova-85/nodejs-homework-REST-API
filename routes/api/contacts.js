@@ -11,13 +11,13 @@ const router = express.Router()
 
 router.get('/', contactsController.listContacts)
 
-router.get('/:contactId', contactsController.getContactById)
+router.get('/:id', contactsController.getContactById)
 
 router.post('/',validateData(schemas.contactsSchema), contactsController.addContact)
 
-router.delete('/:contactId', contactsController.removeContact)
+router.delete('/:id', contactsController.removeContact)
 
-router.put('/:contactId', emptyBodyError, validateData(schemas.contactsSchema), contactsController.updateContact)
+router.put('/:id', emptyBodyError, validateData(schemas.contactsSchema), contactsController.updateContact)
 
 module.exports = router
  
