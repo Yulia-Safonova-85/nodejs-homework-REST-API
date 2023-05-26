@@ -21,7 +21,7 @@ router.delete('/:id', contactsController.removeContact);
 
 router.put('/:id', emptyBodyError, validateData(schemas.contactsSchema), contactsController.updateContact);
 
-router.patch('/:id/favorite',updateStatusError, validateData(schemas.updateFavoriteSchema), contactsController.updateStatusContact);
+router.patch('/:id/favorite', updateStatusError, validateData(schemas.updateFavoriteSchema), contactsController.updateStatusContact);
 
 module.exports = router
  
