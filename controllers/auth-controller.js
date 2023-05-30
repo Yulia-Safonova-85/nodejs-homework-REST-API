@@ -19,8 +19,10 @@ const register = async (req, res, next) => {
 
           const newUser = await User.create({...req.body, password: hashPassword});
           res.status(201).json({
-            email: newUser.email,
-            
+            user:{
+              email: newUser.email,
+              subscription: newUser.subscription,
+            }
           })
       }
         catch(error){
@@ -53,7 +55,10 @@ const register = async (req, res, next) => {
 
              res.json({
                token,
-               
+               user: {
+                email: user.email,
+                subscription: user.subscription
+              }
              })
          }
            catch(error){
@@ -63,10 +68,11 @@ const register = async (req, res, next) => {
 
   const getCurrent = async(req, res, next) => {
         try{
-            const {email} = req.user;
+            const {email,subscription} = req.user;
            
             res.json({
               email,
+              subscription
            })
          }
            catch(error){

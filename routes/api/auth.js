@@ -1,5 +1,7 @@
 const express = require("express");
+
 const ctrl = require("../../controllers/auth-controller");
+
 const authenticate = require ("../../middlewares/authenticate");
 
 const {validateData} = require("../../decorators");
