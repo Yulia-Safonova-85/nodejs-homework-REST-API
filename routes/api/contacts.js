@@ -7,7 +7,7 @@ const schemas = require("../../schemas/contact-schema");
 
 const {validateData, emptyBodyError, updateStatusError} = require("../../decorators");
 const authenticate = require ("../../middlewares/authenticate");
-const upload = require ("../../middlewares/upload");
+
 
 const router = express.Router()
 
@@ -18,7 +18,7 @@ router.get('/', contactsController.listContacts);
 
 router.get('/:id', contactsController.getContactById);
 
-router.post('/', upload.single("avatar"), validateData(schemas.contactsSchema), contactsController.addContact);
+router.post('/', validateData(schemas.contactsSchema), contactsController.addContact);
 
 router.delete('/:id', contactsController.removeContact);
 

@@ -1,7 +1,14 @@
+const fs = require("fs/promises");
+const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {User} = require("../models/user");
 
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+
+const contactsPath = path.resolve("public", "avatars");
+
+const {User} = require("../models/user");
 const {HttpError} = require("../helpers");
 
 const {SECRET_KEY} = process.env;
@@ -16,12 +23,14 @@ const register = async (req, res, next) => {
          }
 
          const hashPassword = await bcrypt.hash(password, 10);
+         const avatarURL = gravatar.url(email);
 
-          const newUser = await User.create({...req.body, password: hashPassword});
+          const newUser = await User.create({...req.body, password: hashPassword, avatarURL});
           res.status(201).json({
             user:{
               email: newUser.email,
               subscription: newUser.subscription,
+              avatarURL: newUser.avatarURL,
             }
           })
       }
@@ -57,7 +66,8 @@ const register = async (req, res, next) => {
                token,
                user: {
                 email: user.email,
-                subscription: user.subscription
+                subscription: user.subscription,
+                avatarURL: user.avatarURL,
               }
              })
          }
@@ -94,10 +104,34 @@ const logout = async(req, res, next) => {
      }
 }
 
+const updateAvatar = async(req, res, next) => {
+  try{
+    const {_id} = req.user;
+    const {path: oldPath, filename} = req.file;
+    const newPath = path.join(contactsPath, filename);
+
+    const avatar = await Jimp.read(oldPath);
+    avatar.autocrop().cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE).write(newPath);
+    
+    await fs.rename(oldPath, newPath);
+    const avatarURL = path.join("avatars", filename);
+
+    await User.findByIdAndUpdate(_id, {avatarURL});
+     
+    res.json({
+      avatarURL
+     })
+  }
+  catch(error){
+    next(error);
+  }
+}
+
 
 module.exports = {
     register,
     login,
     getCurrent,
     logout,
+    updateAvatar,
 }

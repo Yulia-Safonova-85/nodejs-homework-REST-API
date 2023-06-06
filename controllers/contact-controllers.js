@@ -1,10 +1,8 @@
-const fs = require("fs/promises");
-const path = require("path");
 const Contact = require("../models/contact");
 
 const {HttpError} = require("../helpers");
 
-const contactsPath = path.resolve("public", "avatars");
+
 
 const listContacts = async (req, res, next) => {
     try{
@@ -35,12 +33,8 @@ const listContacts = async (req, res, next) => {
 
   const addContact = async (req, res) => {
     try{
-      const {path: oldPath, filename} = req.file;
-      const newPath = path.join(contactsPath, filename);
-      await fs.rename(oldPath, newPath);
-      const avatarURL = path.join("public", "avatars", filename);
         const {_id: owner} = req.user;
-        const result = await Contact.create({...req.body, avatarURL, owner});
+        const result = await Contact.create({...req.body, owner});
         res.status(201).json(result);
     }
       catch(error){
