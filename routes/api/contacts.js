@@ -8,6 +8,7 @@ const schemas = require("../../schemas/contact-schema");
 const {validateData, emptyBodyError, updateStatusError} = require("../../decorators");
 const authenticate = require ("../../middlewares/authenticate");
 
+
 const router = express.Router()
 
 router.use(authenticate);

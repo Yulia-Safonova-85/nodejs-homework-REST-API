@@ -7,6 +7,7 @@ const authenticate = require ("../../middlewares/authenticate");
 const {validateData} = require("../../decorators");
 
 const {schemas} = require("../../models/user");
+const upload = require("../../middlewares/upload");
 
 const router = express.Router();
 require("dotenv").config();
@@ -18,5 +19,7 @@ router.post("/login", validateData(schemas.loginSchema), ctrl.login);
 router.get("/current", authenticate, ctrl.getCurrent);
 
 router.post("/logout", authenticate, ctrl.logout);
+
+router.patch("/avatars", authenticate, upload.single("avatar"), ctrl.updateAvatar );
 
 module.exports = router;
