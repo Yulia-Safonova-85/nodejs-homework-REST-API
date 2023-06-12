@@ -5,5 +5,5 @@ const sendEmail = require("./sendEmail");
 module.exports = {
     HttpError,
     MongooseError,
-    sendEmail
+    sendEmail,
 };

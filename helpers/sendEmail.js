@@ -26,12 +26,12 @@ const mailjet = new Mailjet({
               },
               To: [
                 {
-                  Email: "konsyella@ukr.net",
-                  Name: "konsyella"
+                  Email: data.to,
+                  Name: ""
                 }
               ],
               Subject: data.subject,
-              TextPart: "Dear konsyella, welcome to Mailjet! May the delivery force be with you!",
+              TextPart: "Dear friend, welcome to Mailjet! May the delivery force be with you!",
               HTMLPart: data.html,
             
             }

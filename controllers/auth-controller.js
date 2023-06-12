@@ -12,7 +12,7 @@ const contactsPath = path.resolve("public", "avatars");
 const {User} = require("../models/user");
 const {HttpError, sendEmail} = require("../helpers");
 
-const {SECRET_KEY} = process.env;
+const {SECRET_KEY, BASE_URL} = process.env;
 
 const register = async (req, res, next) => {
         try{
@@ -31,7 +31,7 @@ const register = async (req, res, next) => {
 const verifyEmail = {
      to: email,
      subject:"Verification email sent",
-     html: `<a target="_blank" href="http://localhost:3000/users/verify/${verificationToken}">Click to verify email</a>`
+     html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click to verify email</a>`
 };
 await sendEmail(verifyEmail);
 
@@ -79,7 +79,7 @@ await sendEmail(verifyEmail);
               const verifyEmail = {
                 to: email,
                 subject:"Verification email sent",
-                html: `<a target="_blank" href="http://localhost:3000/users/verify/${verificationToken}">Click to verify email</a>`
+                html: `<a target="_blank" href="http://localhost:3000/users/verify/${user.verificationToken}">Click to verify email</a>`
            };
            await sendEmail(verifyEmail);
 
@@ -98,10 +98,13 @@ await sendEmail(verifyEmail);
             const {email, password} = req.body;
             const user = await User.findOne({email});
    
-            if(!user || !user.verify){
+            if(!user){
                throw HttpError(401, "Email or password is wrong");
             }
    
+            if(!user.verify){
+              throw HttpError(401, "Email not verified");
+            }
             const passwordCompare = await bcrypt.compare(password, user.password);
    
             if(!passwordCompare){
